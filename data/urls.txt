@@ -1,0 +1,8 @@
+# Sample URLs for Thunder Acoustics Analysis
+# Add one URL per line (YouTube, Vimeo, etc.)
+# Lines starting with # are comments
+
+# Example: Real thunder video
+# https://www.youtube.com/watch?v=FRPeYP6gS-o
+
+# Add your URLs below:

@@ -1,0 +1,191 @@
+# Default configuration for thunder acoustics pipeline
+# Version: 1.0
+# Date: 2025-10-15
+
+audio:
+  sample_rate: 48000        # Hz - Standard high-quality audio
+  bit_depth: 24             # bits - Professional audio quality
+  channels: 1               # mono (thunder is omnidirectional)
+  highpass_hz: 20           # Hz - Remove subsonic noise
+  lowpass_hz: 6000          # Hz - Thunder energy upper limit
+  normalize: true           # Apply RMS normalization
+
+preprocessing:
+  sample_rate: 48000        # Hz
+  bit_depth: 24             # bits
+  channels: 1               # mono
+  
+  # Bandpass filter (thunder energy typically 20-6000 Hz)
+  bandpass:
+    low_cutoff: 20          # Hz (highpass)
+    high_cutoff: 6000       # Hz (lowpass)
+    order: 4                # Butterworth filter order
+  
+  # Noise reduction
+  noise_reduction:
+    enabled: true
+    method: "spectral_subtraction"  # or "wiener"
+    noise_profile_duration: 0.5     # seconds (use initial silence)
+  
+  # Normalization
+  normalize:
+    enabled: true
+    method: "rms"           # or "peak"
+    target_db: -20.0        # Target RMS level in dB
+
+detect:
+  # Frame-based analysis
+  frame_len_ms: 20          # ms - Analysis frame length
+  hop_len_ms: 10            # ms - Frame hop (50% overlap)
+  
+  # Energy threshold
+  energy_thresh_db: -25     # dB - Minimum energy for detection
+  
+  # Event merging and filtering
+  merge_gap_ms: 300         # ms - Merge events closer than this
+  min_event_ms: 150         # ms - Discard events shorter than this
+  
+  # Spectral change detection
+  spectral_change_thresh: 0.25  # Normalized spectral flux threshold
+
+detection:
+  # Legacy parameter mapping (for backward compatibility)
+  energy_threshold: 0.01    # Relative to max amplitude (0-1)
+  spectral_threshold: 0.1   # Sudden spectral change indicator
+  
+  # Windowing (converted from detect.frame_len_ms/hop_len_ms)
+  window_size: 0.02         # seconds (20ms)
+  hop_length: 0.01          # seconds (10ms)
+  
+  # Event merging (converted from detect.merge_gap_ms/min_event_ms)
+  merge_gap: 0.3            # seconds (300ms)
+  min_duration: 0.15        # seconds (150ms)
+  
+  # Frequency range for detection
+  detection_band:
+    low: 50                 # Hz (ignore very low rumble)
+    high: 3000              # Hz (main thunder energy)
+
+features:
+  # STFT parameters
+  stft_win_ms: 64           # ms - STFT window length
+  stft_hop_ms: 16           # ms - STFT hop length
+  
+  # Mel-scale parameters
+  n_mels: 64                # Number of mel bands
+  mfcc_n: 13                # Number of MFCC coefficients
+  
+  # Wavelet parameters
+  cwt_wavelet: "morlet"     # Continuous wavelet transform wavelet type
+  
+  # Time domain
+  time_domain:
+    - peak_amplitude
+    - rms
+    - crest_factor
+    - zero_crossing_rate
+    - attack_time
+    - decay_time
+  
+  # Frequency domain
+  frequency_domain:
+    - spectral_centroid
+    - spectral_bandwidth
+    - spectral_rolloff
+    - spectral_slope
+    - dominant_frequency
+  
+  # Time-frequency (converted from stft_win_ms/stft_hop_ms)
+  time_frequency:
+    stft:
+      n_fft: 2048           # FFT size (matches ~64ms @ 48kHz)
+      hop_length: 512       # Hop size (matches ~16ms @ 48kHz)
+      window: "hann"
+    cwt:
+      wavelet: "morlet"     # Morlet wavelet for CWT
+      scales: 64
+    mfcc:
+      n_mfcc: 13            # Standard speech analysis
+      n_mels: 64            # Mel filterbank size
+  
+  # Statistical
+  statistical:
+    - kurtosis
+    - skewness
+    - energy_bands:
+        - [20, 100]         # Low rumble
+        - [100, 500]        # Mid thunder
+        - [500, 6000]       # High-frequency crackle
+
+viz:
+  spectrogram_db_range: 80  # dB - Dynamic range for spectrogram
+  dpi: 160                  # DPI for figure output
+
+distance:
+  # Speed of sound (temperature-dependent)
+  # Formula: c_air = 331.5 + 0.6 * T (m/s, T in Celsius)
+  # Default: 331.5 + 0.6 * 20 = 343.5 m/s @ 20°C
+  reference_temp: 20        # Celsius
+  speed_of_sound: 343.5     # m/s @ 20°C
+  
+  # Flash-to-thunder alignment
+  enable_flash_alignment: true  # Detect lightning flash from video
+  
+  # Flash detection (if available from video)
+  flash_detection:
+    enabled: false          # Requires video analysis (manual override)
+    brightness_threshold: 0.8
+    min_flash_duration: 0.01  # seconds
+
+visualization:
+  # Figure settings
+  dpi: 160                  # DPI (matches viz.dpi)
+  figsize: [12, 8]
+  
+  # Waveform
+  waveform:
+    color: "steelblue"
+    linewidth: 0.5
+  
+  # Spectrogram
+  spectrogram:
+    colormap: "viridis"
+    vmin: -80               # dB
+    vmax: 0                 # dB
+    n_fft: 2048             # Matches features.time_frequency.stft.n_fft
+    hop_length: 512         # Matches features.time_frequency.stft.hop_length
+    y_axis: "log"           # or "linear"
+    freq_min: 20            # Hz (matches audio.highpass_hz)
+    freq_max: 6000          # Hz (matches audio.lowpass_hz)
+  
+  # Event markers
+  events:
+    color: "red"
+    alpha: 0.3
+    linestyle: "--"
+
+output:
+  # Save intermediate files
+  save_interim: true
+  
+  # Logging
+  log_level: "INFO"         # DEBUG, INFO, WARNING, ERROR
+  log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Metadata
+  metadata_schema:
+    - source_url
+    - fetch_date
+    - video_id
+    - duration
+    - location
+    - weather_conditions
+    - analysis_version
+    - config_hash
+
+# Research ethics
+ethics:
+  citation_required: true
+  respect_copyright: true
+  data_retention_days: 365
+  anonymize_location: false  # Set to true if publishing

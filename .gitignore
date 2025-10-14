@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data files (large binary/video files)
+data/raw_videos/*.mp4
+data/raw_videos/*.webm
+data/raw_videos/*.mkv
+data/raw_audio/*.wav
+data/raw_audio/*.mp3
+data/interim/*.wav
+data/processed/*.wav
+
+# Keep structure
+!data/**/.gitkeep
+
+# Outputs (generated reports/plots)
+outputs/*/
+!outputs/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json

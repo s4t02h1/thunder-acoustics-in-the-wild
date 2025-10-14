@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thunder-acoustics-in-the-wild"
+version = "0.1.0"
+description = "Automated thunder acoustics analysis pipeline from web videos"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "s4t02h1", email = "s4t02h1@users.noreply.github.com"}
+]
+keywords = ["acoustics", "thunder", "lightning", "signal-processing", "research"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.11.0",
+    "librosa>=0.10.0",
+    "matplotlib>=3.7.0",
+    "pandas>=2.0.0",
+    "pydub>=0.25.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.65.0",
+    "soundfile>=0.12.0",
+    "scikit-learn>=1.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.25.0",
+]
+ml = [
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/s4t02h1/thunder-acoustics-in-the-wild"
+Repository = "https://github.com/s4t02h1/thunder-acoustics-in-the-wild"
+Documentation = "https://github.com/s4t02h1/thunder-acoustics-in-the-wild/docs"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["thunder*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --cov=thunder --cov-report=html --cov-report=term"

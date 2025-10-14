@@ -1,0 +1,29 @@
+# Core dependencies
+numpy>=1.24.0
+scipy>=1.11.0
+librosa>=0.10.0
+matplotlib>=3.7.0
+pandas>=2.0.0
+pydub>=0.25.0
+pyyaml>=6.0
+tqdm>=4.65.0
+soundfile>=0.12.0
+scikit-learn>=1.3.0
+
+# Optional ML dependencies (uncomment if needed)
+# torch>=2.0.0
+# torchaudio>=2.0.0
+
+# Development dependencies
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+jupyter>=1.0.0
+ipykernel>=6.25.0
+
+# Note: ffmpeg and yt-dlp must be installed separately
+# Windows: choco install ffmpeg yt-dlp
+# macOS: brew install ffmpeg yt-dlp
+# Linux: apt install ffmpeg; pip install yt-dlp
