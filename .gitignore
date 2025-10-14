@@ -37,7 +37,8 @@ env/
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
+# Keep notebooks in version control
+# *.ipynb
 
 # Data files (large binary/video files)
 data/raw_videos/*.mp4
